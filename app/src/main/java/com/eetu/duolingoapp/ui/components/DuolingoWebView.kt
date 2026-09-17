@@ -299,6 +299,19 @@ fun DuolingoWebView(
         }
     }
 
+    val swipeRefreshLayout = remember {
+        androidx.swiperefreshlayout.widget.SwipeRefreshLayout(context).apply {
+            setColorSchemeColors(android.graphics.Color.parseColor("#58CC02"))
+            setOnRefreshListener {
+                webView.reload()
+            }
+            setOnChildScrollUpCallback { _, _ ->
+                webView.canScrollVertically(-1)
+            }
+            addView(webView)
+        }
+    }
+
     DisposableEffect(webView) {
         webView.webChromeClient = chromeClient
         webView.webViewClient = viewClient
@@ -306,20 +319,17 @@ fun DuolingoWebView(
 
         onDispose {
             webView.stopLoading()
+            swipeRefreshLayout.removeAllViews()
         }
     }
 
     Box(modifier = modifier.fillMaxSize()) {
         AndroidView(
             modifier = Modifier.fillMaxSize(),
-            factory = { webView }
+            factory = { swipeRefreshLayout },
+            update = { layout ->
+                layout.isRefreshing = isLoading
+            }
         )
-
-        if (isLoading && progress < 0.9f) {
-            CircularProgressIndicator(
-                progress = { progress },
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
     }
 }

@@ -1,7 +1,6 @@
 package com.eetu.duolingoapp
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
@@ -10,14 +9,17 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,21 +28,25 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import com.eetu.duolingoapp.data.DuolingoSettingsManager
 import com.eetu.duolingoapp.ui.components.DuolingoWebView
 import com.eetu.duolingoapp.ui.dialogs.SettingsDialog
-import com.eetu.duolingoapp.ui.theme.DuoGreen
 import com.eetu.duolingoapp.ui.theme.DuolingoAppTheme
+import kotlinx.coroutines.delay
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
 
@@ -108,35 +114,63 @@ fun MainScreen(settingsManager: DuolingoSettingsManager) {
                 }
             )
 
-            // Minimalist quick action buttons in top-right corner
+            // Draggable, auto-dimming Floating Settings Button
+            var offsetX by remember { mutableFloatStateOf(0f) }
+            var offsetY by remember { mutableFloatStateOf(0f) }
+            var isInteracting by remember { mutableStateOf(false) }
+
+            val fabAlpha by animateFloatAsState(
+                targetValue = if (isInteracting) 0.95f else 0.25f,
+                label = "fabAlpha"
+            )
+
+            LaunchedEffect(isInteracting) {
+                if (isInteracting) {
+                    delay(3500)
+                    isInteracting = false
+                }
+            }
+
             Surface(
                 modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 6.dp, end = 6.dp),
-                shape = MaterialTheme.shapes.extraLarge,
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
-                shadowElevation = 3.dp
+                    .align(Alignment.CenterEnd)
+                    .offset {
+                        IntOffset(
+                            offsetX.roundToInt(),
+                            offsetY.roundToInt()
+                        )
+                    }
+                    .alpha(fabAlpha)
+                    .pointerInput(Unit) {
+                        detectDragGestures(
+                            onDragStart = { isInteracting = true },
+                            onDrag = { change, dragAmount ->
+                                change.consume()
+                                isInteracting = true
+                                offsetX += dragAmount.x
+                                offsetY += dragAmount.y
+                            },
+                            onDragEnd = { isInteracting = true }
+                        )
+                    }
+                    .padding(end = 6.dp),
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shadowElevation = 4.dp
             ) {
-                androidx.compose.foundation.layout.Row {
-                    IconButton(
-                        onClick = { webView?.reload() }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Refresh,
-                            contentDescription = "Reload",
-                            tint = DuoGreen
-                        )
-                    }
-
-                    IconButton(
-                        onClick = { showSettingsDialog = true }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Settings",
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
+                IconButton(
+                    onClick = {
+                        isInteracting = true
+                        showSettingsDialog = true
+                    },
+                    modifier = Modifier.size(42.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Settings",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(22.dp)
+                    )
                 }
             }
 
