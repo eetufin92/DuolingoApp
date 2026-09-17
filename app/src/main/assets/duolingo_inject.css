@@ -51,3 +51,10 @@ div:has(> a[href^="intent://"]) {
 * {
     -webkit-tap-highlight-color: transparent !important;
 }
+
+/* Hide the install-app drawer backdrop mounted by Duolingo into #root.
+   Only the specific data-test attribute is targeted — no class selectors. */
+[data-test="drawer-backdrop"] {
+    display: none !important;
+    pointer-events: none !important;
+}

@@ -52,7 +52,9 @@
     // 3. Inject CSS Stylesheet if not already present
     function injectStyles() {
         if (document.getElementById('duo-anti-nag-styles')) return;
-        const style = document.createElement('style');
+        var target = document.head || document.documentElement;
+        if (!target) return; // still too early, will be called again on DOMContentLoaded
+        var style = document.createElement('style');
         style.id = 'duo-anti-nag-styles';
         style.textContent = `
             ._3CwWq, ._3yEI4, .smartbanner, [class*="smartbanner"], [class*="smart-banner"],
@@ -87,16 +89,17 @@
                 visibility: hidden !important;
                 pointer-events: none !important;
             }
+            [data-test="drawer-backdrop"] {
+                display: none !important;
+                pointer-events: none !important;
+            }
             * { -webkit-tap-highlight-color: transparent !important; }
         `;
-        (document.head || document.documentElement).appendChild(style);
+        target.appendChild(style);
     }
 
-    if (document.head || document.documentElement) {
-        injectStyles();
-    } else {
-        document.addEventListener('DOMContentLoaded', injectStyles);
-    }
+    document.addEventListener('DOMContentLoaded', injectStyles);
+    injectStyles(); // also try immediately in case DOM is already ready
 
     // 4. Clean up install prompts from DOM and restore body scrolling
     const INSTALL_PROMPT_REGEX = /install (the )?app|download (the )?app|let[’']s install the app|continue in app|install duolingo|get the duolingo app|open in app/i;
