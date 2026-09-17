@@ -117,7 +117,7 @@ fun MainScreen(settingsManager: DuolingoSettingsManager) {
             // Draggable, auto-dimming Floating Settings Button
             var offsetX by remember { mutableFloatStateOf(0f) }
             var offsetY by remember { mutableFloatStateOf(0f) }
-            var isInteracting by remember { mutableStateOf(false) }
+            var isInteracting by remember { mutableStateOf(true) }
 
             val fabAlpha by animateFloatAsState(
                 targetValue = if (isInteracting) 0.95f else 0.25f,
@@ -133,7 +133,7 @@ fun MainScreen(settingsManager: DuolingoSettingsManager) {
 
             Surface(
                 modifier = Modifier
-                    .align(Alignment.CenterEnd)
+                    .align(Alignment.TopEnd)
                     .offset {
                         IntOffset(
                             offsetX.roundToInt(),
@@ -153,7 +153,7 @@ fun MainScreen(settingsManager: DuolingoSettingsManager) {
                             onDragEnd = { isInteracting = true }
                         )
                     }
-                    .padding(end = 6.dp),
+                    .padding(top = 8.dp, end = 8.dp),
                 shape = CircleShape,
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shadowElevation = 4.dp
