@@ -18,7 +18,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -307,19 +306,6 @@ fun DuolingoWebView(
         }
     }
 
-    val swipeRefreshLayout = remember {
-        androidx.swiperefreshlayout.widget.SwipeRefreshLayout(context).apply {
-            setColorSchemeColors(android.graphics.Color.parseColor("#58CC02"))
-            setOnRefreshListener {
-                webView.reload()
-            }
-            setOnChildScrollUpCallback { _, _ ->
-                webView.canScrollVertically(-1)
-            }
-            addView(webView)
-        }
-    }
-
     DisposableEffect(webView) {
         webView.webChromeClient = chromeClient
         webView.webViewClient = viewClient
@@ -327,16 +313,16 @@ fun DuolingoWebView(
 
         onDispose {
             webView.stopLoading()
-            swipeRefreshLayout.removeAllViews()
+            (webView.parent as? ViewGroup)?.removeView(webView)
         }
     }
 
     Box(modifier = modifier.fillMaxSize()) {
         AndroidView(
             modifier = Modifier.fillMaxSize(),
-            factory = { swipeRefreshLayout },
-            update = { layout ->
-                layout.isRefreshing = isLoading
+            factory = {
+                (webView.parent as? ViewGroup)?.removeView(webView)
+                webView
             }
         )
     }
