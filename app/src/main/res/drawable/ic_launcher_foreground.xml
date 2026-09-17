@@ -1,0 +1,57 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Duo Owl Face Mask -->
+    <path
+        android:fillColor="#58CC02"
+        android:pathData="M30,38 C30,30 40,24 54,24 C68,24 78,30 78,38 C84,46 84,62 78,72 C70,82 38,82 30,72 C24,62 24,46 30,38 Z" />
+
+    <!-- Left Eye Ring -->
+    <path
+        android:fillColor="#79DC00"
+        android:pathData="M43,36A15,15 0 1,0 43,66A15,15 0 1,0 43,36Z" />
+
+    <!-- Right Eye Ring -->
+    <path
+        android:fillColor="#79DC00"
+        android:pathData="M65,36A15,15 0 1,0 65,66A15,15 0 1,0 65,36Z" />
+
+    <!-- Left Eye White -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M43,39A12,12 0 1,0 43,63A12,12 0 1,0 43,39Z" />
+
+    <!-- Right Eye White -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M65,39A12,12 0 1,0 65,63A12,12 0 1,0 65,39Z" />
+
+    <!-- Left Pupil -->
+    <path
+        android:fillColor="#1B3A00"
+        android:pathData="M45,45A6,6 0 1,0 45,57A6,6 0 1,0 45,45Z" />
+
+    <!-- Right Pupil -->
+    <path
+        android:fillColor="#1B3A00"
+        android:pathData="M63,45A6,6 0 1,0 63,57A6,6 0 1,0 63,45Z" />
+
+    <!-- Left Eye Catchlight -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M46,47A2,2 0 1,0 46,51A2,2 0 1,0 46,47Z" />
+
+    <!-- Right Eye Catchlight -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M64,47A2,2 0 1,0 64,51A2,2 0 1,0 64,47Z" />
+
+    <!-- Orange Beak -->
+    <path
+        android:fillColor="#FF9600"
+        android:pathData="M48,56 C51,56 57,56 60,56 C58,64 56,67 54,67 C52,67 50,64 48,56 Z" />
+
+</vector>

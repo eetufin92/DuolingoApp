@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.DuolingoApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">#131F24</item>
+        <item name="android:statusBarColor">#131F24</item>
+        <item name="android:navigationBarColor">#131F24</item>
+        <item name="android:windowSplashScreenBackground" xmlns:tools="http://schemas.android.com/tools" tools:targetApi="31">#131F24</item>
+    </style>
+</resources>

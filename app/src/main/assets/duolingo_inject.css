@@ -1,0 +1,53 @@
+/* Duolingo Anti-Nag Injected Stylesheet */
+
+/* Hide mobile app download banners */
+._3CwWq,
+._3yEI4,
+.smartbanner,
+[class*="smartbanner"],
+[class*="smart-banner"],
+[name="apple-itunes-app"],
+div[data-test*="app-banner"],
+div[data-test*="open-in-app"],
+div[data-test*="download-the-app"],
+a[href*="play.google.com/store/apps/details?id=com.duolingo"],
+a[href*="apps.apple.com"],
+a[href*="adjust.com"],
+a[href^="market://"],
+a[href^="intent://"] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Hide containers that directly hold store download links */
+div:has(> a[href*="play.google.com"]),
+div:has(> a[href*="apps.apple.com"]),
+div:has(> a[href*="app.adjust.com"]),
+div:has(> a[href^="market://"]),
+div:has(> a[href^="intent://"]) {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Hide overlay dialogs/popups that prompt to install the mobile app */
+#overlays:has(a[href*="play.google.com"]),
+#overlays:has(a[href*="app.adjust.com"]),
+#overlays:has(a[href^="market://"]),
+#overlays:has([data-test*="download-app"]) {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Remove tap highlight gray box */
+* {
+    -webkit-tap-highlight-color: transparent !important;
+}
